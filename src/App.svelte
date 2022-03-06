@@ -2,17 +2,18 @@
 	import { guesses, concelhos, targetConcelho, canGuess, timeToNext } from "./stores.js";
 	import Guess from './Guess.svelte';
 	import FinishModal from './FinishModal.svelte';
-
+	let notFound = false;
 	let currentGuess = '';
 	
 	const submitGuess = (event) => {
 		event.preventDefault();
-		const guess = concelhos.find(concelho => concelho.concelho === currentGuess);
+		const guess = concelhos.find(concelho => concelho.concelho.toLowerCase().localeCompare(currentGuess.toLowerCase(), 'pt', {sensitivity: 'base'}) === 0);
 		
 		if (guess) {
 			guesses.addGuess(guess);
 		} else {
-			console.log('Municipio nao encontrado')
+			console.log('Municipio nao encontrado');
+			notFound = true;
 		}
 		currentGuess = '';
 	}
@@ -33,9 +34,14 @@
 		{/each}
 	</div>
 	<form id="guess-form" on:submit={submitGuess}>
-		<input type="text" id="guess-input" bind:value={currentGuess} disabled={!$canGuess}>
+		<input type="text" id="guess-input" on:input={() => notFound = false} bind:value={currentGuess} disabled={!$canGuess}>
 		<button type="submit" disabled={!$canGuess}>Submeter</button>
 	</form>
+	{#if notFound}
+		<div class="not-found">
+			Município não encontrado
+		</div>
+	{/if}
 
 	
 </main>
@@ -52,6 +58,10 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
+	}
+
+	.not-found {
+		color: red;
 	}
 
 	@media (min-width: 640px) {
