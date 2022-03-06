@@ -1,69 +1,69 @@
 <script>
-	import { guesses, concelhos, targetConcelho, canGuess, timeToNext } from "./stores.js";
-	import Guess from './Guess.svelte';
-	import FinishModal from './FinishModal.svelte';
-	let notFound = false;
-	let currentGuess = '';
 	
-	const submitGuess = (event) => {
-		event.preventDefault();
-		const guess = concelhos.find(concelho => concelho.concelho.toLowerCase().localeCompare(currentGuess.toLowerCase(), 'pt', {sensitivity: 'base'}) === 0);
-		
-		if (guess) {
-			guesses.addGuess(guess);
-		} else {
-			console.log('Municipio nao encontrado');
-			notFound = true;
-		}
-		currentGuess = '';
-	}
+	import FinishModal from './FinishModal.svelte';
+	import HelpModal from './HelpModal.svelte';
+	import PlayArea from './PlayArea.svelte';
+
+	const firstTime = localStorage.getItem('firstTime') === null;
+	localStorage.setItem('firstTime', 'false');
+	let showStatsModal = false;
+	let showHelpModal = firstTime;
 </script>
 
+{#if showHelpModal}
+	<HelpModal on:close={() => showHelpModal = false}/>
+{/if}
 
-{#if !$canGuess}
-		<FinishModal />
-	{/if}
+{#if showStatsModal}
+	<FinishModal on:close={() => showStatsModal = false}/>
+{/if}
+
+<nav class="navbar">
+	<h1>Concelhos</h1>
+	<div class="actions">
+		<button on:click={() => showStatsModal = true}>
+			<svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+				<path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+			  </svg>
+		</button>
+		<button on:click={() => showHelpModal = true}>
+			<svg xmlns="http://www.w3.org/2000/svg" height="24" width="24" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+				<path stroke-linecap="round" stroke-linejoin="round" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+			  </svg>
+		</button>
+	</div>
+</nav>
 
 <main>
-
-	<img src={'svg/' + $targetConcelho.id + '.svg'} alt="Imagem do município" />
-	
-	<div class="guesses">
-		{#each $guesses as guess}
-			<Guess guess={guess}></Guess>
-		{/each}
-	</div>
-	<form id="guess-form" on:submit={submitGuess}>
-		<input type="text" id="guess-input" on:input={() => notFound = false} bind:value={currentGuess} disabled={!$canGuess}>
-		<button type="submit" disabled={!$canGuess}>Submeter</button>
-	</form>
-	{#if notFound}
-		<div class="not-found">
-			Município não encontrado
-		</div>
-	{/if}
-
-	
+	<PlayArea on:gameOver={() => showStatsModal = true}/>
 </main>
 
 <style>
+	.navbar {
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.navbar button {
+		background: none;
+		border: none;
+		outline: none;
+		cursor: pointer;
+		padding: 0;
+		margin: 0;
+		width: 40px;
+		height: 40px;
+		margin: 0 0.25rem;
+	}
+
 	main {
 		text-align: center;
 		padding: 1em;
 		max-width: 240px;
 		margin: 0 auto;
 	}
-
-	.guesses {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-	}
-
-	.not-found {
-		color: red;
-	}
-
 	@media (min-width: 640px) {
 		main {
 			max-width: none;
