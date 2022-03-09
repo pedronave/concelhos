@@ -1,25 +1,5 @@
-<!-- <script>
-    import { clickOutside } from "./click_outside.js";
-    import { createEventDispatcher } from 'svelte';
-
-	const dispatch = createEventDispatcher();
-</script>
-
-<div class="modal" use:clickOutside on:outclick={() => dispatch('close')}>
-    <div class="modal__actions">
-        <button on:click={() => dispatch('close')}>
-            <svg xmlns="http://www.w3.org/2000/svg" height="16" width="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-        </button>
-    </div>
-    <slot></slot>
-</div> -->
-
-
 <script>
 	import { createEventDispatcher, onDestroy } from 'svelte';
-    import { clickOutside } from "./click_outside.js";
 
 	const dispatch = createEventDispatcher();
 	const close = () => dispatch('close');
@@ -70,7 +50,6 @@
         </button>
     </div>
 	<slot></slot>
-
 </div>
 
 <style>

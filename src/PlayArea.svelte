@@ -29,6 +29,11 @@
 
 
 <div class="play-area">
+	{#if !$canGuess}
+		<div class="target-concelho">
+			O concelho de hoje é: {$targetConcelho.concelho}, {$targetConcelho.distrito}
+		</div>
+	{/if}
     <img src={'svg/' + $targetConcelho.id + '.svg'} alt="Imagem do município" />
 	
 	<div class="guesses">
@@ -45,6 +50,7 @@
 			Município não encontrado
 		</div>
 	{/if}
+	
 </div>
 
 <style>
@@ -56,5 +62,9 @@
 
 	.not-found {
 		color: red;
+	}
+	
+	.target-concelho {
+		margin-bottom: 0.5rem;
 	}
 </style>
