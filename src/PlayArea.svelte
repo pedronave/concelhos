@@ -5,6 +5,8 @@
 	
 	let notFound = false;
 	let currentGuess = '';
+	
+	let options = [];
 
 	const dispatch = createEventDispatcher();
 	
@@ -25,6 +27,32 @@
 			notFound = true;
 		}
 	}
+
+	const updateOptions = (event) => {
+		const cleanedUpValue = event.target.value.toLowerCase().replace(/\s+/g, ' ');
+		if (cleanedUpValue.trim().length === 0) {
+			options = [];
+		} else {
+			options = concelhos.filter(x => {
+			const cleanedUpName = x.concelho.toLowerCase();
+			return cleanedUpName.includes(cleanedUpValue);
+		});
+		}
+		
+	};
+
+	const chooseGuess = (evt, concelho) => {
+		evt.preventDefault();
+		guesses.addGuess(concelho);
+			currentGuess = '';
+			options = [];
+			canGuess.subscribe(canGuess => {
+				if (!canGuess) {
+					dispatch('gameOver', {});
+				}
+			});
+	}
+
 </script>
 
 
@@ -41,9 +69,15 @@
 			<Guess guess={guess}></Guess>
 		{/each}
 	</div>
-	<form id="guess-form" on:submit={submitGuess}>
-		<input type="text" id="guess-input" on:input={() => notFound = false} bind:value={currentGuess} disabled={!$canGuess}>
-		<button type="submit" disabled={!$canGuess}>Submeter</button>
+	<form class="guess-form" id="guess-form">
+		<input autocomplete="off" type="text" id="guess-input" on:input={(e) => {notFound = false; updateOptions(e)}} bind:value={currentGuess} disabled={!$canGuess}>
+		{#if $canGuess && options.length > 0}
+			<div class="guess-options">
+				{#each options as option}
+					<button on:click={(e) => chooseGuess(e, option)}>{option.concelho}{#if concelhos.filter(c => c.concelho === option.concelho).length > 1}, {option.distrito}{/if} </button>
+				{/each}
+			</div>
+		{/if}
 	</form>
 	{#if notFound}
 		<div class="not-found">
@@ -63,8 +97,31 @@
 	.not-found {
 		color: red;
 	}
-	
+
 	.target-concelho {
 		margin-bottom: 0.5rem;
+	}
+
+	.guess-form {
+		display: inline-grid;
+
+	}
+	.guess-options {
+		display: inline-flex;
+		flex-direction: column;
+		border: 1px black solid;
+	}
+
+	.guess-options button {
+		background-color: white;
+		border: none;
+		padding: 0;
+		margin: 0;
+		cursor: pointer;
+		padding: 0.5rem;
+	}
+
+	.guess-options button:active, button:hover, button:focus {
+		background-color: rgb(197, 197, 197);
 	}
 </style>
