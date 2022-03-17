@@ -62,7 +62,7 @@ function createGuesses(initialGuesses) {
                             wins: p.wins + (hasCorrectGuess ? 1 : 0),
                             distribution: {
                                 ...p.distribution,
-                                [guesses.length]: p.distribution[guesses.length] + 1
+                                [guesses.length+1]: p.distribution[guesses.length+1] + 1
                             }
                         }));
                     }

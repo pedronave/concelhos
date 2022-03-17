@@ -1,10 +1,6 @@
 <script>
 	import { stats, timeToNext } from "./stores.js";
-    import { clickOutside } from "./click_outside.js";
-    import { createEventDispatcher } from 'svelte';
     import Modal from './Modal.svelte';
-
-	const dispatch = createEventDispatcher();
 </script>
 
 <Modal on:close>
@@ -25,7 +21,7 @@
         </div>
     </div>
 
-    <p>Próximo concelho está disponível em <b>{("0" + (Math.min(0, $timeToNext.getHours() - 1))).slice(-2)}h{("0" + $timeToNext.getMinutes()).slice(-2)}m{("0" + $timeToNext.getSeconds()).slice(-2)}s</b></p>
+    <p>Próximo concelho está disponível em <b>{("0" + (Math.max(0, $timeToNext.getHours() - 1))).slice(-2)}h{("0" + $timeToNext.getMinutes()).slice(-2)}m{("0" + $timeToNext.getSeconds()).slice(-2)}s</b></p>
 </Modal>
 
 <style>

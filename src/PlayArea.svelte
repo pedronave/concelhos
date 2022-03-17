@@ -5,28 +5,9 @@
 	
 	let notFound = false;
 	let currentGuess = '';
-	
 	let options = [];
 
 	const dispatch = createEventDispatcher();
-	
-	const submitGuess = (event) => {
-		event.preventDefault();
-		const cleanedUpValue = currentGuess.toLowerCase().trim().replace(/\s+/g, ' ');
-		const guess = concelhos.find(concelho => concelho.concelho.toLowerCase().localeCompare(cleanedUpValue, 'pt', {sensitivity: 'base'}) === 0);
-		
-		if (guess) {
-			guesses.addGuess(guess);
-			currentGuess = '';
-			canGuess.subscribe(canGuess => {
-				if (!canGuess) {
-					dispatch('gameOver', {});
-				}
-			});
-		} else {
-			notFound = true;
-		}
-	}
 
 	const updateOptions = (event) => {
 		const cleanedUpValue = event.target.value.toLowerCase().replace(/\s+/g, ' ');
@@ -34,9 +15,9 @@
 			options = [];
 		} else {
 			options = concelhos.filter(x => {
-			const cleanedUpName = x.concelho.toLowerCase();
-			return cleanedUpName.includes(cleanedUpValue);
-		});
+				const cleanedUpName = x.concelho.toLowerCase();
+				return cleanedUpName.includes(cleanedUpValue);
+			}).slice(0, 5);
 		}
 		
 	};
@@ -44,33 +25,34 @@
 	const chooseGuess = (evt, concelho) => {
 		evt.preventDefault();
 		guesses.addGuess(concelho);
-			currentGuess = '';
-			options = [];
-			canGuess.subscribe(canGuess => {
-				if (!canGuess) {
-					dispatch('gameOver', {});
-				}
-			});
+		currentGuess = '';
+		options = [];
+		canGuess.subscribe(canGuess => {
+			if (!canGuess) {
+				dispatch('gameOver', {});
+			}
+		});
 	}
-
 </script>
 
 
 <div class="play-area">
+    <img src={'svg/' + $targetConcelho.id + '.svg'} alt="Imagem do município" />
 	{#if !$canGuess}
 		<div class="target-concelho">
 			O concelho de hoje é: {$targetConcelho.concelho}, {$targetConcelho.distrito}
 		</div>
 	{/if}
-    <img src={'svg/' + $targetConcelho.id + '.svg'} alt="Imagem do município" />
-	
 	<div class="guesses">
-		{#each $guesses as guess}
-			<Guess guess={guess}></Guess>
-		{/each}
+		<Guess guess={$guesses.length > 0 ? $guesses[0] : null}></Guess>
+		<Guess guess={$guesses.length > 1 ? $guesses[1] : null}></Guess>
+		<Guess guess={$guesses.length > 2 ? $guesses[2] : null}></Guess>
+		<Guess guess={$guesses.length > 3 ? $guesses[3] : null}></Guess>
+		<Guess guess={$guesses.length > 4 ? $guesses[4] : null}></Guess>
+		<Guess guess={$guesses.length > 5 ? $guesses[5] : null}></Guess>
 	</div>
 	<form class="guess-form" id="guess-form">
-		<input autocomplete="off" type="text" id="guess-input" on:input={(e) => {notFound = false; updateOptions(e)}} bind:value={currentGuess} disabled={!$canGuess}>
+		<input autocomplete="off" type="text" id="guess-input" placeholder="Concelho" on:input={(e) => {notFound = false; updateOptions(e)}} bind:value={currentGuess} disabled={!$canGuess}>
 		{#if $canGuess && options.length > 0}
 			<div class="guess-options">
 				{#each options as option}
@@ -92,6 +74,7 @@
 		display: flex;
 		flex-direction: column;
 		align-items: center;
+		margin-bottom: 0.75rem;
 	}
 
 	.not-found {
@@ -104,7 +87,7 @@
 
 	.guess-form {
 		display: inline-grid;
-
+		width: 300px;
 	}
 	.guess-options {
 		display: inline-flex;
@@ -119,9 +102,11 @@
 		margin: 0;
 		cursor: pointer;
 		padding: 0.5rem;
+		border-bottom: 1px rgb(200, 200, 200) solid;
+		min-height: 40px;
 	}
 
 	.guess-options button:active, button:hover, button:focus {
-		background-color: rgb(197, 197, 197);
+		background-color: rgb(223, 223, 223);
 	}
 </style>

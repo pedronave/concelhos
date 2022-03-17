@@ -1,5 +1,4 @@
 <script>
-	
 	import FinishModal from './FinishModal.svelte';
 	import HelpModal from './HelpModal.svelte';
 	import PlayArea from './PlayArea.svelte';
@@ -42,8 +41,12 @@
 	.navbar {
 		width: 100%;
 		display: flex;
+		box-sizing: border-box;
 		justify-content: space-between;
 		align-items: center;
+		max-width: 1280px;
+		margin: 0 auto;
+		padding: 0 1rem;
 	}
 
 	.navbar button {
@@ -61,12 +64,8 @@
 	main {
 		text-align: center;
 		padding: 1em;
-		max-width: 240px;
+		max-width: 1280px;
+
 		margin: 0 auto;
-	}
-	@media (min-width: 640px) {
-		main {
-			max-width: none;
-		}
 	}
 </style>
