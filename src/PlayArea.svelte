@@ -52,7 +52,7 @@
 		<Guess guess={$guesses.length > 5 ? $guesses[5] : null}></Guess>
 	</div>
 	<form class="guess-form" id="guess-form" on:submit|preventDefault|stopPropagation>
-		<input autocomplete="off" type="text" id="guess-input" placeholder="Concelho" on:submit|preventDefault|stopPropagation on:input={(e) => {notFound = false; updateOptions(e)}} bind:value={currentGuess} disabled={!$canGuess}>
+		<input autocomplete="off" type="text" id="guess-input" placeholder="Concelho" on:input={(e) => {notFound = false; updateOptions(e)}} bind:value={currentGuess} disabled={!$canGuess}>
 		{#if $canGuess && options.length > 0}
 			<div class="guess-options">
 				{#each options as option}

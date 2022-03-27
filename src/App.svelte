@@ -65,6 +65,12 @@
 		text-align: center;
 		padding: 1em;
 		max-width: 1280px;
-		margin: 0 auto;
+		margin: 0 auto 3rem auto;
+	}
+
+	@media screen and (min-width: 768px) {
+		main {
+			margin: 0 auto;
+		}
 	}
 </style>
