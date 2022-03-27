@@ -17,7 +17,7 @@
 			options = concelhos.filter(x => {
 				const cleanedUpName = x.concelho.toLowerCase();
 				return cleanedUpName.includes(cleanedUpValue);
-			}).slice(0, 5);
+			}).sort((a, b) => a.concelho.length - b.concelho.length).slice(0, 5);
 		}
 		
 	};
@@ -51,8 +51,8 @@
 		<Guess guess={$guesses.length > 4 ? $guesses[4] : null}></Guess>
 		<Guess guess={$guesses.length > 5 ? $guesses[5] : null}></Guess>
 	</div>
-	<form class="guess-form" id="guess-form">
-		<input autocomplete="off" type="text" id="guess-input" placeholder="Concelho" on:input={(e) => {notFound = false; updateOptions(e)}} bind:value={currentGuess} disabled={!$canGuess}>
+	<form class="guess-form" id="guess-form" on:submit|preventDefault|stopPropagation>
+		<input autocomplete="off" type="text" id="guess-input" placeholder="Concelho" on:submit|preventDefault|stopPropagation on:input={(e) => {notFound = false; updateOptions(e)}} bind:value={currentGuess} disabled={!$canGuess}>
 		{#if $canGuess && options.length > 0}
 			<div class="guess-options">
 				{#each options as option}

@@ -4,7 +4,7 @@
 	export let guessAngle;
 </script>
 
-<div class="guess">
+<div class="guess {!guessText ? 'guess--empty' : ''}">
 	<span class="guess__text">{guessText ? guessText : ''}</span>
 	<span class="guess__distance">{#if guessText} {guessDistance} km {/if}</span>
 	<span class="guess__direction">
@@ -25,7 +25,6 @@
 <style>
 .guess {
     display: grid;
-    align-items: center;
 	grid-template-columns: auto 65px 40px;
     min-height: 40px;
 	border: 1px solid #ccc;
@@ -34,6 +33,9 @@
 	max-width: 350px;
 }
 
+.guess--empty {
+	background-color: #e6e6e6;
+}
 .guess > * {
 	height: 100%;
 	display: inline-flex;
