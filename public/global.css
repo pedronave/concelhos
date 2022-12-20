@@ -70,3 +70,7 @@ button:focus {
 	box-sizing: border-box;
 	z-index: 1000;
 }
+
+#mkid-widget-toggle {
+	margin: 0
+}

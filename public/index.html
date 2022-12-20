@@ -13,18 +13,18 @@
 	<script defer src='/build/bundle.js'></script>
 
 	<script>
-		(function(d, h, m){
-			var js, fjs = d.getElementsByTagName(h)[0];
-			if (d.getElementById(m)){return;}
-			js = d.createElement(h); js.id = m;
+		(function(w){
+			var js, fjs = document.getElementsByTagName('script')[0];
+			if (document.getElementById("mkid-script")) {return;}
+			js = document.createElement('script'); js.id = "mkid-script";
+			js.async = true; js.defer = true;
 			js.onload = function(){
-				window.makerWidgetComInit({
-				position: "right",          
-				widget: "jdjmtthvklnpc7pk-gxscvhsxhniyhope-0qovgq64d7eiwvyj"                
+					window.makerIdInitialize({         
+					id: w                
 			})};
-			js.src = "https://makerwidget.com/js/embed.js";
+			js.src = "https://makerid.page/embed/embed.js";
 			fjs.parentNode.insertBefore(js, fjs)
-		}(document, "script", "dhm"))
+		}('kCXFGKmPgcCXtpgYMt6F'));
 	</script>
 </head>
 
